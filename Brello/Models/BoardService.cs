@@ -12,5 +12,22 @@ namespace Brello.Models
         public BoardService(BoardContext _context) {
             context = _context;
         }
+
+        public bool AddList(Board _board, BrelloList _list)
+        {
+            return false;
+        }
+
+        // Could have used IQueryable, but that would take hours for Jurnell to explain
+        public List<BrelloList> GetAllLists()
+        {
+            return null;
+        }
+
+        // This is an example of overloading a method
+        public List<BrelloList> GetAllLists(Board _board)
+        {
+            return null;
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace Brello.Models
         public int ColorId { get; }
         public string Name { get; set; }
         public string Value { get; set; }
-        
+
         public int CompareTo(object obj)
         {
             Color other_color = obj as Color;
@@ -19,8 +19,8 @@ namespace Brello.Models
             return this.Name.CompareTo(other_color.Name);
 
         }
-        
-        public static bool operator==(Color color1,object obj2)
+
+        public static bool operator ==(Color color1, object obj2)
         {
             return 0 == color1.CompareTo(obj2 as Color);
         }
