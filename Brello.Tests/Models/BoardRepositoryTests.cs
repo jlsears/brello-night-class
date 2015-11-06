@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Brello.Models;
 using Moq;
 using System.Data.Entity;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Brello.Tests.Models
 {
@@ -81,6 +83,46 @@ namespace Brello.Tests.Models
             mock_boards.Verify(m => m.Add(It.IsAny<Board>()));
             mock_context.Verify(x => x.SaveChanges(), Times.Once());
         }
-        
+
+        [TestMethod]
+        public void BoardRepositoryEnsureICanGetAllBOards()
+        {
+            var mock_context = new Mock<BoardContext>();
+            var mock_boards = new Mock<DbSet<Board>>();
+
+            ApplicationUser owner = new ApplicationUser();
+
+            //Board my_board = new Board { Title = "My Board", Owner = owner };
+            //List<Board> data = new List<Board>;
+
+            // The cool way to do this
+            // Also, can use this list as something you query against like a database
+            // We have crossed a threshold says Jurnell
+            var data = new List<Board> {
+                new Board { Title = "My Awesome Board", Owner = owner },
+                new Board { Title = "My Other Awesome Board", Owner = owner }
+            }.AsQueryable();
+
+            // Allows for query to be passed to underlying datastore using expression tree
+            // Casting the thing we're mocking
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Provider).Returns(data.Provider);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Expression).Returns(data.Expression);
+
+            mock_context.Setup(m => m.Boards).Returns(mock_boards.Object);
+
+
+            BoardRepository board_repo = new BoardRepository(mock_context.Object);
+
+            //BoardRepository board_repo = new BoardRepository(mock_context.Object);
+            //ApplicationUser owner = new ApplicationUser();
+            //board_repo.CreateBoard("My Awesome Board", owner);
+            //board_repo.CreateBoard("My Other Awesome Board", owner);
+
+
+            List<Board> boards = board_repo.GetAllBoards();
+            Assert.AreEqual(2, boards.Count);
+        }
     }
 }
