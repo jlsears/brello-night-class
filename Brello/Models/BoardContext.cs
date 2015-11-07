@@ -16,8 +16,9 @@ namespace Brello.Models
 
         public virtual IDbSet<Color> Colors { get; set; }
         public virtual IDbSet<Card> Cards { get; set; }
-        public virtual IDbSet<Board> Boards { get; set; }
+        public virtual DbSet<Board> Boards { get; set; }
+        // Taking the I away makes this a concrete class rather than an interface
 
-        // IQueryable, IList/List, ICollection/Collection
+        // IQueryable, IList/List, ICollection/Collection, IDbset/Dbset
     }
 }
