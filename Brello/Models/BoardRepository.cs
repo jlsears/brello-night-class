@@ -14,14 +14,36 @@ namespace Brello.Models
         }
 
         // void or bool or BrelloList
-        public bool AddList(Board _board, BrelloList _list)
+        public bool AddList(int _board_id, BrelloList _list)
         {
-            return false;
+            //Board b = GetBoards(_board_id);
+            var query = from b in context.Boards where b.BoardId == _board_id select b;
+            Board found_board = null;
+            bool result = true;
+            try
+            {
+                found_board = query.Single<Board>();
+                found_board.Lists.Add(_list);
+                context.SaveChanges();
+
+            }
+            catch (InvalidOperationException)
+            {
+
+                result = false;
+            }
+            catch (ArgumentNullException)
+            {
+                result = false;
+            }
+            return result;
         }
 
         public List<BrelloList> GetAllLists()
         {
-            return null;
+            var query = from l in context.Boards select l;
+            return query.SelectMany(board => board.Lists).ToList();
+            // Had to add the .ToList() to convert to same type as the outer signature
         }
 
         // This is an example of overloading a method
@@ -57,6 +79,11 @@ namespace Brello.Models
         {
             var query = from b in context.Boards where b.Owner == user1 select b;
             return query.ToList<Board>(); // Same as query.ToList();
+        }
+
+        public int GetListCount()
+        {
+            return GetAllLists().Count;
         }
     }
 }
