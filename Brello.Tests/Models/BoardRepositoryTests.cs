@@ -75,6 +75,22 @@ namespace Brello.Tests.Models
         }
 
         [TestMethod]
+        public void BoardRepositoryEnsureICanDeleteAList()
+        {
+            BoardRepository board_repo = new BoardRepository(mock_context.Object);
+            BrelloList list = new BrelloList { Title = "ToDo", BrelloListId = 1 };
+            my_list.Add(new Board { Title = "My First Board", Owner = user1, BoardId = 1 });
+
+            ConnectMocksToDataSource();
+            bool adding = board_repo.AddList(1, list);
+
+            bool actual = board_repo.RemoveList(1, list);
+            Assert.AreEqual(0, board_repo.GetListCount());
+            Assert.IsTrue(adding);
+
+        }
+
+        [TestMethod]
         public void BoardRepositoryEnsureFalseIfInvalidBoardId()
         {
             BoardRepository board_repo = new BoardRepository(mock_context.Object);
