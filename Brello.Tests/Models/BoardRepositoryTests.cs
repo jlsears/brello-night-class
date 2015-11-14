@@ -259,6 +259,39 @@ namespace Brello.Tests.Models
         }
 
         [TestMethod]
+        public void BoardRepositoryCanDeleteABoard()
+        {
+                        /* Begin Arrange */
+            var data = my_list.AsQueryable();
+
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Provider).Returns(data.Provider);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Expression).Returns(data.Expression);
+
+            // This allows BoardRepository to call Boards.Add and have it update the my_list instance and Enumerator
+            // Connect DbSet.Add to List.Add so they work together
+            mock_boards.Setup(m => m.Add(It.IsAny<Board>())).Callback((Board b) => my_list.Add(b));
+
+            mock_context.Setup(m => m.Boards).Returns(mock_boards.Object);
+
+            BoardRepository board_repo = new BoardRepository(mock_context.Object);
+            string title = "My Awesome Board";
+            /* End Arrange */
+
+            /* Begin Act */
+            Board added_board = board_repo.CreateBoard(title, owner);
+
+            board_repo.RemoveBoard(added_board);
+
+            /* End Act */
+
+            /*Begin Assert*/
+            Assert.AreEqual(0, board_repo.GetBoardCount());
+            /*End Assert*/
+        }
+
+        [TestMethod]
         public void BoardRepositoryEnsureICanGetAllBoards()
         {
             /* Begin Arrange */

@@ -80,6 +80,15 @@ namespace Brello.Models
             return my_board;
         }
 
+        public void RemoveBoard(Board my_board)
+        {
+            //Board my_board = new Board { Title = title, Owner = owner };
+            context.Boards.Remove(my_board);
+            context.SaveChanges(); // This saves something to the Database
+
+            //return;
+        }
+
         public List<Board> GetAllBoards()
         {
             return context.Boards.ToList();
