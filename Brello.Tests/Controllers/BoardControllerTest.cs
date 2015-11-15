@@ -2,12 +2,30 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Brello.Controllers;
 using System.Web.Mvc;
+using Moq;
+using Brello.Models;
+using System.Collections.Generic;
 
 namespace Brello.Tests.Controllers
 {
     [TestClass]
     public class BoardControllerTest
     {
+        private Mock<BoardContext> mock_context;
+        private Mock<BoardRepository> mock_repository;
+        private ApplicationUser owner, user1, user2;
+
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            mock_context = new Mock<BoardContext>();
+            mock_repository = new Mock<BoardRepository>();
+            owner = new ApplicationUser();
+            user1 = new ApplicationUser();
+            user2 = new ApplicationUser();
+        }
+
         [TestMethod]
         public void BoardControllerEnsureIndexPageExists()
         {
@@ -40,6 +58,26 @@ namespace Brello.Tests.Controllers
             // Assert
             string expected_message = "My Boards";
             Assert.AreEqual(expected_message, result.ViewBag.Message);
+        }
+
+        [TestMethod]
+        public void BoardControllerEnsureListOfUserBoards()
+        {
+            // Arrange
+            List<Board> my_boards = new List<Board>
+            {
+                new Board {Title = "My Awesome Board", BoardId = 1, Owner = owner },
+                new Board {Title = "My Grocery List", BoardId = 2, Owner = owner }
+            };
+            BoardController controller = new BoardController(mock_repository.Object);
+            // Want to return some set of boards we've predefined
+            mock_repository.Setup(r => r.GetAllBoards()).Returns(my_boards); // Returning fake data we created
+
+            // Act
+            ViewResult result = controller.Index() as ViewResult;
+
+            // Assert
+            CollectionAssert.AreEqual(my_boards, result.ViewBag.Boards);
         }
     }
 }
