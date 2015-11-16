@@ -86,7 +86,7 @@ namespace Brello.Tests.Models
 
             bool actual = board_repo.RemoveList(1, list);
             Assert.AreEqual(0, board_repo.GetListCount());
-            Assert.IsTrue(adding);
+            Assert.IsTrue(actual);
 
         }
 
