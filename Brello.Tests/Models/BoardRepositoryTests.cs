@@ -272,6 +272,8 @@ namespace Brello.Tests.Models
             // This allows BoardRepository to call Boards.Add and have it update the my_list instance and Enumerator
             // Connect DbSet.Add to List.Add so they work together
             mock_boards.Setup(m => m.Add(It.IsAny<Board>())).Callback((Board b) => my_list.Add(b));
+            mock_boards.Setup(m => m.Remove(It.IsAny<Board>())).Callback((Board b) => my_list.Remove(b));
+
 
             mock_context.Setup(m => m.Boards).Returns(mock_boards.Object);
 
