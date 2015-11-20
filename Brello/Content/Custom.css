@@ -1,3 +1,31 @@
-﻿.brellolist {
+﻿html {
+    height: 100%;
+}
+
+.brellolist {
     width: 270px;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: #C2C2C2;
+    border: 1px solid #CFCFCF;
+    border-radius: 5px;
+}
+
+div.container-fluid {
+    overflow-x: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 90%;
+}
+
+.red {
+    border: solid 1px red;
+}
+
+.green {
+    border: solid 1px green;
+}
+
+ul.center {
+    padding: 0;
 }
