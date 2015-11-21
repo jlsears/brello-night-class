@@ -58,6 +58,29 @@ namespace Brello.Models
             return result;
         }
 
+        public bool EditTitle(int _list_id, string newTitle)
+        {
+            var query = from l in context.Lists where l.ListId == _list_id select l;
+            Board found_list = null;
+            bool result = true;
+            try
+            {
+                found_board = query.Single<Board>();
+                found_board.Lists.Remove(_list);
+                context.SaveChanges();
+            }
+            catch (InvalidOperationException)
+            {
+                result = false;
+            }
+            catch (ArgumentNullException)
+            {
+                result = false;
+            }
+            return result;
+        }
+
+
         public List<BrelloList> GetAllLists()
         {
             var query = from l in context.Boards select l;

@@ -87,6 +87,19 @@ namespace Brello.Tests.Models
             bool actual = board_repo.RemoveList(1, list);
             Assert.AreEqual(0, board_repo.GetListCount());
             Assert.IsTrue(actual);
+        }
+
+        [TestMethod]
+        public void BoardRepositoryEnsureICanEditAListItem()
+        {
+            BoardRepository board_repo = new BoardRepository(mock_context.Object);
+            BrelloList list = new BrelloList { Title = "ToDo", BrelloListId = 1 };
+            my_list.Add(new Board { Title = "My First Board", Owner = user1, BoardId = 1 });
+
+            ConnectMocksToDataSource();
+            bool adding = board_repo.AddList(1, list);
+
+            board_repo.EditTitle(1, newTitle);
 
         }
 
