@@ -90,7 +90,18 @@ namespace Brello.Tests.Models
         }
 
         [TestMethod]
-        public void BoardRepositoryEnsureICanEditAListItem()
+        public void BoardRepositoryEnsureICanEditABoardTitle()
+        {
+            BoardRepository board_repo = new BoardRepository(mock_context.Object);
+
+            ConnectMocksToDataSource();
+
+            board_repo.EditBoardTitle(1, "Here's a new title");
+
+        }
+
+        [TestMethod]
+        public void BoardRepositoryEnsureICanEditAListTitle()
         {
             BoardRepository board_repo = new BoardRepository(mock_context.Object);
             BrelloList list = new BrelloList { Title = "ToDo", BrelloListId = 1 };
@@ -99,7 +110,7 @@ namespace Brello.Tests.Models
             ConnectMocksToDataSource();
             bool adding = board_repo.AddList(1, list);
 
-            board_repo.EditTitle(1, newTitle);
+            board_repo.EditListTitle(1, list, "Here's a new list title");
 
         }
 

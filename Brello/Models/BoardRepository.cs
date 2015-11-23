@@ -58,15 +58,38 @@ namespace Brello.Models
             return result;
         }
 
-        public bool EditTitle(int _list_id, string newTitle)
+        public bool EditBoardTitle(int _board_id, string newTitle)
         {
-            var query = from l in context.Lists where l.ListId == _list_id select l;
-            Board found_list = null;
+            var query = from b in context.Boards where b.BoardId == _board_id select b;
+            Board found_board = null;
             bool result = true;
             try
             {
                 found_board = query.Single<Board>();
-                found_board.Lists.Remove(_list);
+                found_board.Title = newTitle;
+                //found_board.Lists.Add(_list);
+                context.SaveChanges();
+            }
+            catch (InvalidOperationException)
+            {
+                result = false;
+            }
+            catch (ArgumentNullException)
+            {
+                result = false;
+            }
+            return result;
+        }
+
+        public bool EditListTitle(int _board_id, BrelloList _list, string newTitle)
+        {
+            var query = from b in context.Boards where b.BoardId == _board_id select b;
+            Board found_board = null;
+            bool result = true;
+            try
+            {
+                found_board = query.Single<Board>();
+                _list.Title = newTitle;
                 context.SaveChanges();
             }
             catch (InvalidOperationException)
