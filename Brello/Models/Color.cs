@@ -7,6 +7,7 @@ namespace Brello.Models
 {
     public class Color : IComparable
     {
+        [System.ComponentModel.DataAnnotations.Key]
         public int ColorId { get; }
         public string Name { get; set; }
         public string Value { get; set; }

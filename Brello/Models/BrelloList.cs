@@ -7,6 +7,7 @@ namespace Brello.Models
 {
     public class BrelloList
     {
+        [System.ComponentModel.DataAnnotations.Key]
         public int BrelloListId { get; set; }
         public string Title { get; set; }
         public List<Card> Cards { get; set; }
