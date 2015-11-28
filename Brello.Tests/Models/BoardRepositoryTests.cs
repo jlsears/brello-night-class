@@ -101,6 +101,20 @@ namespace Brello.Tests.Models
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void BoardRepositoryEnsureWillNotAttemptEditforNonExistentBoard()
+        {
+            BoardRepository board_repo = new BoardRepository(mock_context.Object);
+            BrelloList list = new BrelloList { Title = "ToDo", BrelloListId = 1 };
+            my_list.Add(new Board { Title = "My First Board", Owner = user1, BoardId = 1 });
+
+            ConnectMocksToDataSource();
+
+            board_repo.EditBoardTitle(5, "Here's a new title");
+        }
+
+
+        [TestMethod]
         public void BoardRepositoryEnsureICanEditAListTitle()
         {
             BoardRepository board_repo = new BoardRepository(mock_context.Object);
