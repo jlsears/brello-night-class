@@ -70,6 +70,7 @@ namespace Brello.Tests.Models
 
             bool actual = board_repo.AddList(1, list);
 
+
             Assert.AreEqual(1, board_repo.GetListCount());
             Assert.IsTrue(actual);
         }
@@ -96,8 +97,15 @@ namespace Brello.Tests.Models
 
             ConnectMocksToDataSource();
 
-            board_repo.EditBoardTitle(1, "Here's a new title");
+            //board_repo.CreateBoard("First Title", user1);
+            Board hereBoard = new Board { BoardId = 1, Title = "First Title" };
+            my_list.Add(hereBoard);
 
+            bool editing = board_repo.EditBoardTitle(1, "Here's a new title");
+            string actual = "Here's a new title";
+
+            Assert.AreEqual(actual, hereBoard.Title);
+            Assert.IsTrue(editing);
         }
 
         [TestMethod]
@@ -110,7 +118,8 @@ namespace Brello.Tests.Models
 
             ConnectMocksToDataSource();
 
-            board_repo.EditBoardTitle(5, "Here's a new title");
+            bool editing = board_repo.EditBoardTitle(5, "Here's a new title");
+            Assert.IsTrue(editing);
         }
 
 
@@ -125,6 +134,8 @@ namespace Brello.Tests.Models
             bool adding = board_repo.AddList(1, list);
 
             board_repo.EditListTitle(1, list, "Here's a new list title");
+            string actual = "Here's a new list title";
+            Assert.AreEqual(actual, list.Title);
 
         }
 
